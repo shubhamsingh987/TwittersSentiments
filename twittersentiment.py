@@ -36,5 +36,5 @@ if __name__ == "__main__" :
         text = re.sub(r'http\S+', '', text)
         if str(detect_langs(text)[0])[0:2] == 'en':
             print(text,'\n')
-            Speak(text)
+            Speak(text) #remove this line if using linux
             sentiment_scores(text)
