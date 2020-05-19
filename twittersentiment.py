@@ -1,23 +1,24 @@
+import platform
 import re
 import tweepy
+import pyttsx3
 from langdetect import detect_langs
-import win32com.client
-auth = tweepy.OAuthHandler("WZ9VoayS9f6fsz9ReWYiRi3aQ", "TXqNig43nkJivD7ofNQbwFL7UVt5PLtnNmi9zdXLJ1KYoGF4TB")
+auth = tweepy.OAuthHandler("WZ9VoayS9f6fsz9ReWYiRi3aQ", "TXqNig43nkJivD7ofNQbwFL7UVt5PLtnNmi9zdXLJ1KYoGF4T")
 auth.set_access_token("231249661-297yAWMEqfKNdkookgBjbsqWveqcJ699lfjV0pcx", "M0vpMcPuAbH2Lx5e8IBTqTFv7asyc1DsYs7dG9oUy9eoW")
 api = tweepy.API(auth)
 
 username='imVKohli'
-
-my_tweets = api.user_timeline(screen_name=username,count=20)
+count=2
+my_tweets = api.user_timeline(screen_name=username,count=count)
 from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
 def Speak(text):
-    win32com.client.Dispatch("SAPI.SpVoice").Speak(text)       
+    engine = pyttsx3.init('espeak')
+    engine.setProperty('rate', 150)  
+    engine.say(text) 
+    engine.runAndWait()
 def sentiment_scores(sentence):
     sid_obj = SentimentIntensityAnalyzer() 
-    sentiment_dict = sid_obj.polarity_scores(sentence) 
-    print("sentence was rated as ", sentiment_dict['neg']*100, "% Negative") 
-    print("sentence was rated as ", sentiment_dict['neu']*100, "% Neutral") 
-    print("sentence was rated as ", sentiment_dict['pos']*100, "% Positive") 
+    sentiment_dict = sid_obj.polarity_scores(sentence)  
     Speak("Sentence Overall Rated As")
     print("Sentence Overall Rated As", end = ":") 
 
@@ -30,7 +31,7 @@ def sentiment_scores(sentence):
         print("Negative") 
         
 if __name__ == "__main__" :
-    Speak("following are some tweets by "+api.get_user(username).name)
+    Speak("top"+str(count)+'recent tweets by'+api.get_user(username).name)
     for t in my_tweets:
         text=t.text
         text = re.sub(r'http\S+', '', text)
