@@ -26,7 +26,7 @@ def sentiment_scores(sentence):
         Speak('positive')
         print('Positive') 
   
-    elif sentiment_dict['compound'] <= - 0.05 : 
+    elif sentiment_dict['compound'] <0.05 : 
         Speak('negative')
         print("Negative") 
         
